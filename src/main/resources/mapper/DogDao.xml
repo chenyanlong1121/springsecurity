@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.DogDao">
+
+    <resultMap type="com.example.demo.entity.Dog" id="DogMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="dogId" column="dog_id" jdbcType="VARCHAR"/>
+        <result property="employeeId" column="employee_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DogMap">
+        select id,
+               dog_id,
+               employee_id
+        from chenyanlong.dog
+        where dog_id = #{dogId}
+    </select>
+
+    <!--按员工编号查询-->
+    <select id="queryByEmployee_id" resultMap="DogMap">
+        select id,
+               dog_id,
+               employee_id
+        from chenyanlong.dog
+        where employee_id = #{employee_id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DogMap">
+        select id,
+               dog_id,
+               employee_id
+        from chenyanlong.dog
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DogMap">
+        select
+        id, dog_id, employee_id
+        from chenyanlong.dog
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="dogId != null and dogId != ''">
+                and dog_id = #{dogId}
+            </if>
+            <if test="employeeId != null and employeeId != ''">
+                and employee_id = #{employeeId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="dogId" useGeneratedKeys="true">
+        insert into chenyanlong.dog(id, employee_id)
+        values (#{id}, #{employeeId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="dogId" useGeneratedKeys="true">
+        insert into chenyanlong.dog(id, employee_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.employeeId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="dogId" useGeneratedKeys="true">
+        insert into chenyanlong.dog(id, employee_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.employeeId})
+        </foreach>
+        on duplicate key update
+        id = values(id) , employee_id = values(employee_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update chenyanlong.dog
+        <set>
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="employeeId != null and employeeId != ''">
+                employee_id = #{employeeId},
+            </if>
+        </set>
+        where dog_id = #{dogId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from chenyanlong.dog
+        where dog_id = #{dogId}
+    </delete>
+
+</mapper>
+

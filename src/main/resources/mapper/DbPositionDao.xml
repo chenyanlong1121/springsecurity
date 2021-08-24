@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.DbPositionDao">
+
+    <resultMap type="com.example.demo.entity.DbPosition" id="DbPositionMap">
+        <result property="employeeId" column="employee_id" jdbcType="VARCHAR"/>
+        <result property="position" column="position" jdbcType="VARCHAR"/>
+        <result property="departmentId" column="department_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DbPositionMap">
+        select employeeId,
+               position,
+               department_id
+        from chenyanlong.db_position
+        where employeeId = #{employeeId}
+    </select>
+    <!--查询指定条件-->
+    <select id="queryByDepartment_id" resultMap="DbPositionMap">
+        select employeeId,
+               position,
+               department_id
+        from chenyanlong.db_position
+        where department_id = #{department_id}
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DbPositionMap">
+        select employeeId,
+               position,
+               department_id
+        from chenyanlong.db_position
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DbPositionMap">
+        select
+        employeeId, position, department_id
+        from chenyanlong.db_position
+        <where>
+            <if test="employeeId != null and employeeId != ''">
+                and employee_id = #{employeeId}
+            </if>
+            <if test="position != null">
+                and position = #{position}
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                and department_id = #{departmentId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="employeeId" useGeneratedKeys="true">
+        insert into chenyanlong.db_position(employeeId,position, department_id)
+        values (#{employeeId},#{position}, #{departmentId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="employeeId" useGeneratedKeys="true">
+        insert into chenyanlong.db_position(employeeId,position, department_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{employeeId},#{entity.position}, #{entity.departmentId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="employeeId" useGeneratedKeys="true">
+        insert into chenyanlong.db_position(employeeId,position, department_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.employeeId},#{entity.position}, #{entity.departmentId})
+        </foreach>
+        on duplicate key update
+        position = values(position) , department_id = values(department_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update chenyanlong.db_position
+        <set>
+            <if test="position != null">
+                position = #{position},
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                department_id = #{departmentId},
+            </if>
+        </set>
+        where employee_id = #{employeeId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from chenyanlong.db_position
+        where employeeId = #{employeeId}
+    </delete>
+
+</mapper>
+

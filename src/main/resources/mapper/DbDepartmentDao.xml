@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.DbDepartmentDao">
+
+    <resultMap type="com.example.demo.entity.DbDepartment" id="DbDepartmentMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="departmentId" column="departmentId" jdbcType="VARCHAR"/>
+        <result property="departmentName" column="departmentName" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="superiorDepartmentId" column="superior_department_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DbDepartmentMap">
+        select id,
+               departmentId,
+               departmentName,
+               phone,
+               superior_department_id
+        from chenyanlong.db_department
+        where departmentId = #{departmentId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DbDepartmentMap">
+        select id,
+               departmentId,
+               departmentName,
+               phone,
+               superior_department_id
+        from chenyanlong.db_department
+        limit #{offset}, #{limit}
+    </select>
+    <!--查询下级部门-->
+    <select id="queryAllBysup" resultMap="DbDepartmentMap" >
+        select *
+        from chenyanlong.db_department
+        where superior_department_id = #{superiorDepartmentId"}
+    </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DbDepartmentMap">
+        select
+        id, departmentId, departmentName, phone, superior_department_id
+        from chenyanlong.db_department
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="departmentId != null and departmentId != ''">
+                and department_id = #{departmentId}
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                and department_name = #{departmentName}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="superiorDepartmentId != null and superiorDepartmentId != ''">
+                and superior_department_id = #{superiorDepartmentId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="departmentId" useGeneratedKeys="true">
+        insert into chenyanlong.db_department(id, departmentName, phone, superior_department_id)
+        values (#{id}, #{departmentName}, #{phone}, #{superiorDepartmentId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="departmentId" useGeneratedKeys="true">
+        insert into chenyanlong.db_department(id, departmentName, phone, superior_department_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.departmentName}, #{entity.phone}, #{entity.superiorDepartmentId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="departmentId" useGeneratedKeys="true">
+        insert into chenyanlong.db_department(id, departmentName, phone, superior_department_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.departmentName}, #{entity.phone}, #{entity.superiorDepartmentId})
+        </foreach>
+        on duplicate key update
+        id = values(id) , departmentName = values(departmentName) , phone = values(phone) , superior_department_id =
+        values(superior_department_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update chenyanlong.db_department
+        <set>
+            <if test="id != null">
+                id = #{id},
+            </if>
+            <if test="departmentName != null and departmentName != ''">
+                department_name = #{departmentName},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="superiorDepartmentId != null and superiorDepartmentId != ''">
+                superior_department_id = #{superiorDepartmentId},
+            </if>
+        </set>
+        where department_id = #{departmentId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from chenyanlong.db_department
+        where departmentId = #{departmentId}
+    </delete>
+
+</mapper>
+
