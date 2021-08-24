@@ -18,7 +18,10 @@ public interface SysRoleDao {
   * @param roleId 主键
   * @return 实例对象
   */
+
    SysRole queryByid(String roleId);
+
+
     List<SysRole> queryById(String roleId);
 
     /**

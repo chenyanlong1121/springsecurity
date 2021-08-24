@@ -4,6 +4,7 @@ import com.example.demo.entity.SysRole;
 import com.example.demo.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -22,6 +23,9 @@ public interface SysUserDao {
      * @return 实例对象
      */
     SysUser queryById(Integer userId);
+
+
+
     SysUser selectUserByName(String username);
     /**
      * 查询指定行数据

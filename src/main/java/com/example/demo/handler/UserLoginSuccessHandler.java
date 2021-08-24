@@ -50,10 +50,6 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
         resultData.put("msg", "登录成功");
 //       resultData.put("token",token);
         ResultUtil.responseJson(response,resultData);
-        DbPosition dbPosition=dbPositionService.queryById(selfUserEntity.getUsername());
-        String level=dbPosition.getPosition();
-        String department=dbPosition.getDepartmentId();
-        String id=dbPosition.getEmployeeId();
 //     response.sendRedirect("http://localhost:8080/BaseController/login?employeeId="+selfUserEntity.getUsername());
 
     }

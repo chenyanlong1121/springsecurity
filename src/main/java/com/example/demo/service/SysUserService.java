@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.entity.SysRole;
 import com.example.demo.entity.SysUser;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public interface SysUserService {
      */
     SysUser queryById(Integer userId);
 
+
+    @Cacheable(value = "chenyanlong",key = "#username")//在这，用springcache进去的
     SysUser selectUserByName(String username);
 
     /**
