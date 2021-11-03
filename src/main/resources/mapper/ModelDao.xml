@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.ModelDao">
+
+    <resultMap type="com.example.demo.entity.Model" id="ModelMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="modelName" column="model_name" jdbcType="VARCHAR"/>
+        <result property="centerId" column="center_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ModelMap">
+        select id,
+               model_name,
+               center_id
+        from chenyanlong.model
+        where id = #{id}
+    </select>
+    <!--查询单个-->
+    <select id="queryBymodel_name" resultMap="ModelMap">
+        select id,
+               model_name,
+               center_id
+        from chenyanlong.model
+        where model_name = #{model_name}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ModelMap">
+        select id,
+               model_name,
+               center_id
+        from chenyanlong.model
+        limit #{offset}, #{limit}
+    </select>
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllModel" resultMap="ModelMap">
+        select id,
+               model_name,
+               center_id
+        from chenyanlong.model
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ModelMap">
+        select
+        id, model_name, center_id
+        from chenyanlong.model
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="modelName != null and modelName != ''">
+                and model_name = #{modelName}
+            </if>
+            <if test="centerId != null and centerId != ''">
+                and center_id = #{centerId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into chenyanlong.model(model_name, center_id)
+        values (#{modelName}, #{centerId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into chenyanlong.model(model_name, center_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.modelName}, #{entity.centerId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into chenyanlong.model(model_name, center_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.modelName}, #{entity.centerId})
+        </foreach>
+        on duplicate key update
+        model_name = values(model_name) , center_id = values(center_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update chenyanlong.model
+        <set>
+            <if test="modelName != null and modelName != ''">
+                model_name = #{modelName},
+            </if>
+            <if test="centerId != null and centerId != ''">
+                center_id = #{centerId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from chenyanlong.model
+        where id = #{id}
+    </delete>
+
+</mapper>
+

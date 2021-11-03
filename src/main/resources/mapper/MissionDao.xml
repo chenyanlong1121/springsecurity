@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.MissionDao">
+
+    <resultMap type="com.example.demo.entity.Mission" id="MissionMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="missionName" column="mission_name" jdbcType="VARCHAR"/>
+        <result property="director" column="director" jdbcType="VARCHAR"/>
+        <result property="oppositePerson" column="opposite_person" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="modelId" column="model_id" jdbcType="VARCHAR"/>
+        <result property="describtion" column="describtion" jdbcType="VARCHAR"/>
+        <result property="starttime" column="starttime" jdbcType="VARCHAR"/>
+        <result property="endtime" column="endtime" jdbcType="VARCHAR"/>
+        <result property="timechange" column="timechange" jdbcType="VARCHAR"/>
+        <result property="changreason" column="changreason" jdbcType="VARCHAR"/>
+        <result property="speedOfProgress" column="speed_of_progress" jdbcType="VARCHAR"/>
+        <result property="relatedDocumentLinks" column="related_document_links" jdbcType="VARCHAR"/>
+        <result property="acceptancePassed" column="acceptance_passed" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="MissionMap">
+        select id,
+               mission_name,
+               director,
+               opposite_person,
+               model,
+               model_id, describtion, starttime, endtime, timechange, changreason, speed_of_progress, related_document_links, acceptance_passed
+        from chenyanlong.mission
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="MissionMap">
+        select id,
+               mission_name,
+               director,
+               opposite_person,
+               model,
+               model_id, describtion, starttime, endtime, timechange, changreason, speed_of_progress, related_document_links, acceptance_passed
+        from chenyanlong.mission
+        limit #{offset}, #{limit}
+    </select>
+    <!--查询每周数据-->
+    <select id="queryAllBydate" resultMap="MissionMap">
+        select id,
+               mission_name,
+               director,
+               opposite_person,
+               model,
+               model_id, describtion, starttime, endtime, timechange, changreason, speed_of_progress, related_document_links, acceptance_passed
+        from chenyanlong.mission where starttime between #{date1} and #{date2}
+    </select>
+
+    <!--查询所有-->
+    <select id="queryAllMissions" resultMap="MissionMap">
+        select id,
+               mission_name,
+               director,
+               opposite_person,
+               model,
+               model_id,describtion, starttime, endtime, timechange, changreason, speed_of_progress, related_document_links, acceptance_passed
+        from chenyanlong.mission
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="MissionMap">
+        select
+        id, mission_name, director, opposite_person, model, model_id, describe, starttime, endtime, timechange,
+        changreason, speed_of_progress, related_document_links, acceptance_passed
+        from chenyanlong.mission
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="missionName != null and missionName != ''">
+                and mission_name = #{missionName}
+            </if>
+            <if test="director != null and director != ''">
+                and director = #{director}
+            </if>
+            <if test="oppositePerson != null and oppositePerson != ''">
+                and opposite_person = #{oppositePerson}
+            </if>
+            <if test="model != null and model != ''">
+                and model = #{model}
+            </if>
+            <if test="modelId != null and modelId != ''">
+                and model_id = #{modelId}
+            </if>
+            <if test="describe != null and describe != ''">
+                and describtion = #{describe}
+            </if>
+            <if test="starttime != null and starttime != ''">
+                and starttime = #{starttime}
+            </if>
+            <if test="endtime != null and endtime != ''">
+                and endtime = #{endtime}
+            </if>
+            <if test="timechange != null and timechange != ''">
+                and timechange = #{timechange}
+            </if>
+            <if test="changreason != null and changreason != ''">
+                and changreason = #{changreason}
+            </if>
+            <if test="speedOfProgress != null and speedOfProgress != ''">
+                and speed_of_progress = #{speedOfProgress}
+            </if>
+            <if test="relatedDocumentLinks != null and relatedDocumentLinks != ''">
+                and related_document_links = #{relatedDocumentLinks}
+            </if>
+            <if test="acceptancePassed != null and acceptancePassed != ''">
+                and acceptance_passed = #{acceptancePassed}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into chenyanlong.mission(mission_name, director, opposite_person, model, model_id, describtion, starttime,
+                                        endtime, timechange, changreason, speed_of_progress, related_document_links,
+                                        acceptance_passed)
+        values (#{missionName}, #{director}, #{oppositePerson}, #{model}, #{modelId}, #{describe}, #{starttime},
+                #{endtime}, #{timechange}, #{changreason}, #{speedOfProgress}, #{relatedDocumentLinks},
+                #{acceptancePassed})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into chenyanlong.mission(mission_name, director, opposite_person, model, model_id, describtion, starttime,
+        endtime, timechange, changreason, speed_of_progress, related_document_links, acceptance_passed)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.missionName}, #{entity.director}, #{entity.oppositePerson}, #{entity.model}, #{entity.modelId},
+            #{entity.describe}, #{entity.starttime}, #{entity.endtime}, #{entity.timechange}, #{entity.changreason},
+            #{entity.speedOfProgress}, #{entity.relatedDocumentLinks}, #{entity.acceptancePassed})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into chenyanlong.mission(mission_name, director, opposite_person, model, model_id, describtion, starttime,
+        endtime, timechange, changreason, speed_of_progress, related_document_links, acceptance_passed)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.missionName}, #{entity.director}, #{entity.oppositePerson}, #{entity.model}, #{entity.modelId},
+            #{entity.describe}, #{entity.starttime}, #{entity.endtime}, #{entity.timechange}, #{entity.changreason},
+            #{entity.speedOfProgress}, #{entity.relatedDocumentLinks}, #{entity.acceptancePassed})
+        </foreach>
+        on duplicate key update
+        mission_name = values(mission_name) , director = values(director) , opposite_person = values(opposite_person) ,
+        model = values(model) , model_id = values(model_id) , describtion = values(describtion) , starttime =
+        values(starttime) , endtime = values(endtime) , timechange = values(timechange) , changreason =
+        values(changreason) , speed_of_progress = values(speed_of_progress) , related_document_links =
+        values(related_document_links) , acceptance_passed = values(acceptance_passed)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update chenyanlong.mission
+        <set>
+            <if test="missionName != null and missionName != ''">
+                mission_name = #{missionName},
+            </if>
+            <if test="director != null and director != ''">
+                director = #{director},
+            </if>
+            <if test="oppositePerson != null and oppositePerson != ''">
+                opposite_person = #{oppositePerson},
+            </if>
+            <if test="model != null and model != ''">
+                model = #{model},
+            </if>
+            <if test="modelId != null and modelId != ''">
+                model_id = #{modelId},
+            </if>
+            <if test="describe != null and describe != ''">
+                describtion = #{describe},
+            </if>
+            <if test="starttime != null and starttime != ''">
+                starttime = #{starttime},
+            </if>
+            <if test="endtime != null and endtime != ''">
+                endtime = #{endtime},
+            </if>
+            <if test="timechange != null and timechange != ''">
+                timechange = #{timechange},
+            </if>
+            <if test="changreason != null and changreason != ''">
+                changreason = #{changreason},
+            </if>
+            <if test="speedOfProgress != null and speedOfProgress != ''">
+                speed_of_progress = #{speedOfProgress},
+            </if>
+            <if test="relatedDocumentLinks != null and relatedDocumentLinks != ''">
+                related_document_links = #{relatedDocumentLinks},
+            </if>
+            <if test="acceptancePassed != null and acceptancePassed != ''">
+                acceptance_passed = #{acceptancePassed},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+<update id="updateOrinsert">
+    insert into chenyanlong.mission(mission_name, director, opposite_person, model, model_id, describtion, starttime,
+                                    endtime, timechange, changreason, speed_of_progress, related_document_links,
+                                    acceptance_passed)
+    values (#{missionName}, #{director}, #{oppositePerson}, #{model}, #{modelId}, #{describe}, #{starttime},
+            #{endtime}, #{timechange}, #{changreason}, #{speedOfProgress}, #{relatedDocumentLinks},
+            #{acceptancePassed})
+    ON DUPLICATE KEY UPDATE
+        director=VALUES(director),
+        opposite_person=VALUES(opposite_person),
+        model=VALUES(model),
+        model_id=VALUES(model_id),
+        describtion=VALUES(describtion),
+        starttime=VALUES(starttime),
+        speed_of_progress=VALUES(speed_of_progress),
+        endtime=VALUES(endtime),
+        timechange=VALUES(timechange),
+        changreason=VALUES(changreason),
+        related_document_links=VALUES(related_document_links),
+        acceptance_passed=VALUES(acceptance_passed)
+
+</update>
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from chenyanlong.mission
+        where id = #{id}
+    </delete>
+
+</mapper>
+

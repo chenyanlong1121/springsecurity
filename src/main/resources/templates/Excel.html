@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="http://localhost:80/web-apps/apps/api/documents/api.js"></script>
+    </style>
+</head>
+<body>
+<div id="placeholder" class = "nav"></div>
+<script language="javascript" type="text/javascript">
+    window.docEditor=new DocsAPI.DocEditor("placeholder", {
+        "document": {
+            "fileType": "doc",
+            "key": "apiwh20b7fe7d-dbec-492d-8b95-aec8ca4d23f3kkk",
+            "title": "excel.excel",
+            "url": "http:\/\/172.20.40.58:8080\/a.doc"
+           // "url":"https:\/\/d2nlctn12v279m.cloudfront.net\/assets\/docs\/samples\/demo.doc"
+        },
+        "documentType": "text",
+        "width": "1600px",
+        "height": "900px",
+        // "editorConfig": {
+        //     "callbackUrl": "http://172.20.40.58:8080/Mission/updateDb"
+        // },
+        "permissions": {
+            "comment": true,
+            "download": true,
+            "edit": true,
+            "fillForms": true,
+        "print": true,
+        "review": true
+    }
+    });
+
+
+    // window.docEditor = new DocsAPI.DocEditor("placeholder",
+    //     {"document":{"fileType":"xls","key":"apiwh20b7fe7d-dbec-492d-8b95-aec8ca4d23f3","title":"Example Spreadsheet Title.xls","url":"https:\/\/d2nlctn12v279m.cloudfront.net\/assets\/docs\/samples\/demo.xls"},"documentType":"cell","editorConfig":{"callbackUrl":"https:\/\/api.onlyoffice.com\/editors\/callback","customization":{"anonymous":{"request":false}}},"height":"100%","token":"ew0KICAidHlwIjogIkpXVCIsDQogICJhbGciOiAiSFMyNTYiDQp9.ew0KICAiZG9jdW1lbnQiOiB7DQogICAgImZpbGVUeXBlIjogInhscyIsDQogICAgImtleSI6ICJhcGl3aDIwYjdmZTdkLWRiZWMtNDkyZC04Yjk1LWFlYzhjYTRkMjNmMyIsDQogICAgInRpdGxlIjogIkV4YW1wbGUgU3ByZWFkc2hlZXQgVGl0bGUueGxzIiwNCiAgICAidXJsIjogImh0dHBzOi8vZDJubGN0bjEydjI3OW0uY2xvdWRmcm9udC5uZXQvYXNzZXRzL2RvY3Mvc2FtcGxlcy9kZW1vLnhscyINCiAgfSwNCiAgImRvY3VtZW50VHlwZSI6ICJjZWxsIiwNCiAgImVkaXRvckNvbmZpZyI6IHsNCiAgICAiY2FsbGJhY2tVcmwiOiAiaHR0cHM6Ly9hcGkub25seW9mZmljZS5jb20vZWRpdG9ycy9jYWxsYmFjayIsDQogICAgImN1c3RvbWl6YXRpb24iOiB7DQogICAgICAiYW5vbnltb3VzIjogew0KICAgICAgICAicmVxdWVzdCI6IGZhbHNlDQogICAgICB9DQogICAgfQ0KICB9LA0KICAiaGVpZ2h0IjogIjEwMCUiLA0KICAid2lkdGgiOiAiMTAwJSINCn0.NYFITykt1zmMgKdJDEYCdavjS4TxYsCmQnJzUE9THuo","width":"100%"}
+    // );
+
+
+</script>
+</body>
+</html>

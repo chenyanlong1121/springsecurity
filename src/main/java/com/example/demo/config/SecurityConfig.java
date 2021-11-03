@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -69,7 +70,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         handler.setPermissionEvaluator(new UserPermissionEvaluator());
         return handler;
     }
-
+    @Override
+    public void configure(WebSecurity webSecurity){
+        webSecurity.ignoring().antMatchers("/Excel.html");
+    }
     /**
      * 配置登录验证逻辑
      */
@@ -86,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // 不进行权限验证的请求或资源(从配置文件中读取)
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login","/Excel").permitAll()
                 // 其他的需要登陆后才能访问
                 .anyRequest().authenticated()
                 .and()

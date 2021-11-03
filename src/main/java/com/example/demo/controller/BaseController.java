@@ -5,6 +5,12 @@ import com.example.demo.entity.DbEmployee;
 import com.example.demo.entity.Dog;
 import com.example.demo.service.BaseService;
 import io.swagger.annotations.*;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.InputStreamSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +18,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 @Api(tags = "信息管理平台")
@@ -87,4 +95,42 @@ public class BaseController {
     public List<Dog> SuperiorQuerySubordinateDepartmentEmployeesDog(@RequestParam("employeeId")String id){
         return this.baseService.SuperiorQuerySubordinateDepartmentEmployeesDog(id);
     }
+
+
+
+    @ApiOperation(value = "test")
+    @GetMapping("/test")
+    public ResponseEntity<InputStreamResource> test() {
+        byte[] bytes=null;
+        try{
+            bytes=new byte[1024];
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(bytes);
+        Arrays.fill(bytes, (byte) 9);
+        InputStreamResource stream=new InputStreamResource(byteArrayInputStream);
+        IOUtils.closeQuietly(byteArrayInputStream);
+        return from("test","txt",stream);
+
+    }
+    public static ResponseEntity<InputStreamResource> from(String fileName, String suffix,InputStreamResource bytes) {
+        if (bytes == null ) {
+            throw new RuntimeException("文件生成失败");
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        String encodedFileName = null;
+        try {
+            encodedFileName = java.net.URLEncoder.encode(fileName, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        headers.add("Content-Disposition", String.format("attachment; filename=\"%s.%s\"; filename*=utf-8''%s.%s", encodedFileName, suffix, encodedFileName, suffix));
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        headers.add("Content-Language", "UTF-8");
+        return ResponseEntity.ok().headers(headers).contentLength(1024*1024*512).contentType(MediaType.APPLICATION_OCTET_STREAM).body(bytes);
+    }
+
 }
